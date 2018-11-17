@@ -81,7 +81,7 @@ cagr <-
       (1/10)) - 1) * 100
 
 cagr <- round(cagr, 2)
-
+set.seed(777777)
 # Running monte-carlo analysis
 sims <- 120
 starts <- 
@@ -94,6 +94,8 @@ monte_carlo_sims <-
           N = length(starts),
           mean = mean_port_return,
           stdev = stddev_port_return)
+
+hist(monte_carlo_sims$growth119)
 
 tail(monte_carlo_sims %>%  select(growth1, growth2,
                                     growth49, growth50), 3)
@@ -122,6 +124,11 @@ sim_summary <-
     min = min(final),
     median = median(final))
 
+mc_gathered <- 
+  monte_carlo_sims %>% 
+  gather(sim, growth, -month) %>% 
+  group_by(sim)
+
 mc_max_med_min <- 
   mc_gathered %>%
   filter(
@@ -130,7 +137,20 @@ mc_max_med_min <-
       last(growth) == sim_summary$min) %>% 
   group_by(sim)
 
+hchart(mc_gathered, 
+       type = 'line', 
+       hcaes(y = growth,
+             x = month,
+             group = sim)) %>% 
+  hc_title(text = "51 Simulations") %>%
+  hc_xAxis(title = list(text = "months")) %>%
+  hc_yAxis(title = list(text = "dollar growth"),
+           labels = list(format = "${value}")) %>%
+  hc_add_theme(hc_theme_flat()) %>%
+  hc_exporting(enabled = TRUE) %>% 
+  hc_legend(enabled = FALSE)
 
+hist(monte_carlo_sims$growth119)
 # Sources:
 # https://rviews.rstudio.com/2018/06/05/monte-carlo/
 # https://rviews.rstudio.com/2018/06/13/monte-carlo-part-two/
