@@ -9,7 +9,8 @@ Please do not touch this script if you do not know
 what you are doing. I will have a settings file that 
 can adjust this script without damaging it. 
 '''
-
+set.seed(7777777)
+#777777
 library(tidyquant)
 library(tidyverse)
 library(timetk)
@@ -81,7 +82,7 @@ cagr <-
       (1/10)) - 1) * 100
 
 cagr <- round(cagr, 2)
-set.seed(777777)
+
 # Running monte-carlo analysis
 sims <- 120
 starts <- 
