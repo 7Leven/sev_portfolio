@@ -28,21 +28,15 @@ library(purrr)
 # Generating portfolio & metrics
 
 
-symbols <- c("AMZN", "CELH",
-             "XOM", "TLT", "IAU",
-             "GSK", "GD", "LMT", 
-             "NOC", "RTN", "PANW", 
-             "WDC")
-w <- c(.18, .01, .05, .32,
-       .07, .05, .05, .05,
-       .05, .07, .08, .02)
+symbols <- c("FDN", "QQQ", "MCD")
+w <- c(.30,.25, .45)
 num_months <- 120
-num_sims <- 5000
+num_sims <- 1500
 
 prices <- 
   getSymbols(symbols, src = 'yahoo', 
-             from = "2013-01-01",
-             to = "2018-11-09",
+             from = "2006-01-01",
+             to = "2018-10-01",
              auto.assign = TRUE, warnings = FALSE) %>% 
   map(~Ad(get(.))) %>%
   reduce(merge) %>% 
@@ -101,17 +95,17 @@ cagr <- round(cagr, 2)
 
 # Running monte-carlo analysis
 starts <- 
-  rep(1, num_months) %>%
-  set_names(paste("sim", 1:num_months, sep = ""))
+  rep(1, num_sims) %>%
+  set_names(paste("sim", 1:num_sims, sep = ""))
 
 monte_carlo_sims <- 
   map_dfc(starts, 
           simulation_cumprod, 
-          N = length(starts),
+          N = num_months,
           mean = mean_port_return,
           stdev = stddev_port_return)
 
-ending_balances <- as.numeric(monte_carlo_sims[119,])
+ending_balances <- as.numeric(monte_carlo_sims[120,])
 
 hist(ending_balances)
 
@@ -170,7 +164,6 @@ hchart(mc_gathered,
   hc_exporting(enabled = TRUE) %>% 
   hc_legend(enabled = FALSE)
 
-hist(monte_carlo_sims$growth119)
 # Sources:
 # https://rviews.rstudio.com/2018/06/05/monte-carlo/
 # https://rviews.rstudio.com/2018/06/13/monte-carlo-part-two/
