@@ -8,8 +8,15 @@ Rambler Investment Fund. (RIF)
 Please do not touch this script if you do not know
 what you are doing. I will have a settings file that 
 can adjust this script without damaging it. 
+
+symbols <- c("AMZN", "LVMUY", "CELH",
+             "XOM", "TLT", "IAU",
+"GSK", "GD", "LMT", 
+"NOC", "RTN", "PANW", 
+"TCEHY", "WDC")
+
 '''
-set.seed(7777777)
+#set.seed(7777777)
 #777777
 library(tidyquant)
 library(tidyverse)
@@ -20,12 +27,21 @@ library(purrr)
 
 # Generating portfolio & metrics
 
-symbols <- c("FDN","QQQ", "MCD")
-w <- c(0.3, 0.3, .4)
+
+symbols <- c("AMZN", "CELH",
+             "XOM", "TLT", "IAU",
+             "GSK", "GD", "LMT", 
+             "NOC", "RTN", "PANW", 
+             "WDC")
+w <- c(.18, .01, .05, .32,
+       .07, .05, .05, .05,
+       .05, .07, .08, .02)
+num_months <- 120
+num_sims <- 5000
 
 prices <- 
   getSymbols(symbols, src = 'yahoo', 
-             from = "2006-6-01",
+             from = "2013-01-01",
              to = "2018-11-09",
              auto.assign = TRUE, warnings = FALSE) %>% 
   map(~Ad(get(.))) %>%
@@ -55,7 +71,7 @@ mean_port_return <-
 stddev_port_return <- 
   sd(portfolio_returns_tq_rebalanced_yearly$returns)
 
-simulated_monthly_returns <- rnorm(120, 
+simulated_monthly_returns <- rnorm(num_months, 
                                    mean_port_return, 
                                    stddev_port_return)
 
@@ -84,10 +100,9 @@ cagr <-
 cagr <- round(cagr, 2)
 
 # Running monte-carlo analysis
-sims <- 120
 starts <- 
-  rep(1, sims) %>%
-  set_names(paste("sim", 1:sims, sep = ""))
+  rep(1, num_months) %>%
+  set_names(paste("sim", 1:num_months, sep = ""))
 
 monte_carlo_sims <- 
   map_dfc(starts, 
@@ -96,7 +111,9 @@ monte_carlo_sims <-
           mean = mean_port_return,
           stdev = stddev_port_return)
 
-hist(monte_carlo_sims$growth119)
+ending_balances <- as.numeric(monte_carlo_sims[119,])
+
+hist(ending_balances)
 
 tail(monte_carlo_sims %>%  select(growth1, growth2,
                                     growth49, growth50), 3)
@@ -124,6 +141,8 @@ sim_summary <-
     max = max(final), 
     min = min(final),
     median = median(final))
+
+sim_summary
 
 mc_gathered <- 
   monte_carlo_sims %>% 
