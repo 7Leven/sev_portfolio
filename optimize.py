@@ -40,7 +40,11 @@ price_data.index.rename('date', True)
 returns = expected_returns.mean_historical_return(price_data)
 cov = risk_models.sample_cov(price_data)
 
-ef = EfficientFrontier(returns, cov, weight_bounds = (.15, .4))
+ef = EfficientFrontier(returns, cov, weight_bounds = (.1, .4))
+sharpe = ef.max_sharpe()
+min_vol = ef.min_volatility()
+performance = ef.portfolio_performance()
+# returns expected returns, volatility, sharpe ratio
 
 elapsed = round(time.time() - start_time, 2)
 

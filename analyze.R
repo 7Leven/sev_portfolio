@@ -28,14 +28,18 @@ library(purrr)
 # Generating portfolio & metrics
 
 
-symbols <- c("FDN", "QQQ", "MCD")
-w <- c(.30,.25, .45)
+roth_symbols <- c("FDN", "QQQ", "MCD", "CVS", "TMUS")
+roth_weights <- c(.248, .167, .37, .079, .136)
+spy <- c("spy")
+spyw <- c(1)
 num_months <- 120
 num_sims <- 1500
+symbols <- roth_symbols
+w <- roth_weights
 
 prices <- 
   getSymbols(symbols, src = 'yahoo', 
-             from = "2006-01-01",
+             from = "2008-01-01",
              to = "2018-10-01",
              auto.assign = TRUE, warnings = FALSE) %>% 
   map(~Ad(get(.))) %>%

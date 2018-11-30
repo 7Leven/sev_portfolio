@@ -11,7 +11,7 @@ Please only touch this file.
 start_date = [2007,1,1]
 end_date = [2018,11,2]
 
-portfolio = ['FDN', 'MCD', 'QQQ', 'COST']
+portfolio = ['FDN', 'MCD', 'QQQ', 'CSV', 'TMUS']
 
 
 '''
