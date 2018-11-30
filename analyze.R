@@ -1,5 +1,4 @@
 '''
-Written by 7Leven.
 pat@7Leven.net
 
 This script is to analyze the portfolios for the 
@@ -20,10 +19,12 @@ symbols <- c("AMZN", "LVMUY", "CELH",
 #777777
 library(tidyquant)
 library(tidyverse)
+library(timeSeries)
 library(timetk)
 library(broom)
 library(highcharter)
 library(purrr)
+library(PerformanceAnalytics)
 
 # Generating portfolio & metrics
 
@@ -113,8 +114,8 @@ ending_balances <- as.numeric(monte_carlo_sims[120,])
 
 hist(ending_balances)
 
-tail(monte_carlo_sims %>%  select(growth1, growth2,
-                                    growth49, growth50), 3)
+tail(monte_carlo_sims %>%  select(growth1, growth30,
+                                    growth90, growth120), 3)
 
 monte_carlo_sims <- 
   monte_carlo_sims %>% 
@@ -155,18 +156,6 @@ mc_max_med_min <-
       last(growth) == sim_summary$min) %>% 
   group_by(sim)
 
-hchart(mc_gathered, 
-       type = 'line', 
-       hcaes(y = growth,
-             x = month,
-             group = sim)) %>% 
-  hc_title(text = "51 Simulations") %>%
-  hc_xAxis(title = list(text = "months")) %>%
-  hc_yAxis(title = list(text = "dollar growth"),
-           labels = list(format = "${value}")) %>%
-  hc_add_theme(hc_theme_flat()) %>%
-  hc_exporting(enabled = TRUE) %>% 
-  hc_legend(enabled = FALSE)
 
 # Sources:
 # https://rviews.rstudio.com/2018/06/05/monte-carlo/
