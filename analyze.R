@@ -29,7 +29,7 @@ library(PerformanceAnalytics)
 # Generating portfolio & metrics
 
 
-roth_symbols <- c("FDN", "QQQ", "MCD", "CVS", "TMUS")
+roth_symbols <- c("FDN", "QQQ", "MCD", "CVS", "TMUS", )
 roth_weights <- c(.248, .167, .37, .079, .136)
 spy <- c("spy")
 spyw <- c(1)
@@ -69,6 +69,8 @@ mean_port_return <-
 
 stddev_port_return <- 
   sd(portfolio_returns_tq_rebalanced_yearly$returns)
+
+ts_returns <- as.timeSeries(portfolio_returns_tq_rebalanced_yearly)
 
 simulated_monthly_returns <- rnorm(num_months, 
                                    mean_port_return, 
