@@ -18,7 +18,7 @@ Need to write a function that calculates returns and variance.
 ######################      MISC: CONFIG       #########################################
 
 setwd("C:\\Users\\patdjm7\\Documents\\RIF\\sev_portfolio\\sev_portfolio") # sets the working directory
-start_date <- "2015-01-01" #Format year-mo-da
+start_date <- "2007-01-01" #Format year-mo-da
 end_date <- substr(Sys.time(), 0, 10) #gets current date
 tar_return <- .1 #target return - 10%
 tar_risk <- .05 #target risk variance - 5%
@@ -27,10 +27,10 @@ risk_free <- .0275 #risk free rate, treasury
 risk_aversion <- 4 #risk aversion coefficient
 
 tickers <- c("LVMUY", "CELH",                                        #CONSUMER DISCRETIONARY
-             "AMZN", "PANW", "WDC", "SNAP", "TSLA","MU",             #TECH
+             "AMZN", "PANW", "WDC", "TSLA","MU",                     #TECH
              "GSK", "MRK",                                           #HEALTHCARE
              "GD", "LMT", "NOC", "RTN", "BA", "MDR",                 #INDUSTRIALS
-             "XOM", "PXD", "ARCH",                                   #ENERGY
+             "XOM", "PXD",                                           #ENERGY
              "CL", "NGG", "VZ", "BAX", "FMS",                        #DEFENSIVE
              "SHY",                                                  #FIXED INCOME
              "IAU",                                                  #COMMODITIES
@@ -38,16 +38,16 @@ tickers <- c("LVMUY", "CELH",                                        #CONSUMER D
              "MINT")                                                 #CASH
 
 
-weights <- c("minW[1:24]=.0015", "maxW[1:24]=.05",          # Min-Max Weights all tickers
-             "minsumW[1:24]=.4", "minsumW[25:29]=.6",       # 40% min Equities, 60% min else         
-             "maxsumW[1:2]=.02", "maxsumW[3:8]=.05",        # 2% max consumer disc. 5% max tech
-             "maxsumW[9:10]=.1", "maxsumW[11:16]=.06",      # 10% max health. 6% max industr.
-             "maxsumW[17:19]=.05", "maxsumW[20:24]=.12",    # 5% max energy. 12% max defensive
-             "minW[20:24]=.015",                            # 1.5% min individual defensive
-             "minsumW[25]=.3", "minsumW[26]=.1",            # 30% minimum fix-inc. 10% min commodities
-             "minW[27:28]=.005",                            # Individual min weights for alt.
-             "minsumW[27:28]=.015","maxsumW[27:28]=.02",    # 1.5-2% range alternatives
-             "minsumW[29]=.18","maxsumW[29]=.18")           # 18% cash 
+weights <- c("minW[1:22]=.0015", "maxW[1:22]=.05",          # Min-Max Weights all tickers
+             "minsumW[1:22]=.4", "minsumW[22:27]=.6",       # 40% min Equities, 60% min else         
+             "maxsumW[1:2]=.02", "maxsumW[3:7]=.05",        # 2% max consumer disc. 5% max tech
+             "maxsumW[8:9]=.1", "maxsumW[10:15]=.06",      # 10% max health. 6% max industr.
+             "maxsumW[16:17]=.05", "maxsumW[18:22]=.12",    # 5% max energy. 12% max defensive
+             "minW[18:22]=.015",                            # 1.5% min individual defensive
+             "minsumW[23]=.3", "minsumW[24]=.1",            # 30% minimum fix-inc. 10% min commodities
+             "minW[25:26]=.005",                            # Individual min weights for alt.
+             "minsumW[25:26]=.015","maxsumW[25:26]=.02",    # 1.5-2% range alternatives
+             "minsumW[27]=.18","maxsumW[27]=.18")           # 18% cash 
 
 ######################STEP ONE: Gathering Data#########################################
 

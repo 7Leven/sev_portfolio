@@ -31,10 +31,10 @@ port_weights <- paste("portfolios_",end_date,".csv", sep="")
 weights <- read.csv(port_weights)
 weights$X <- NULL
 tickers <- c("LVMUY", "CELH",                                        #CONSUMER DISCRETIONARY
-             "AMZN", "PANW", "WDC", "SNAP", "TSLA","MU",             #TECH
+             "AMZN", "PANW", "WDC", "TSLA","MU",                     #TECH
              "GSK", "MRK",                                           #HEALTHCARE
              "GD", "LMT", "NOC", "RTN", "BA", "MDR",                 #INDUSTRIALS
-             "XOM", "PXD", "ARCH",                                   #ENERGY
+             "XOM", "PXD",                                           #ENERGY
              "CL", "NGG", "VZ", "BAX", "FMS",                        #DEFENSIVE
              "SHY",                                                  #FIXED INCOME
              "IAU",                                                  #COMMODITIES
@@ -82,15 +82,15 @@ while(pcount <= num_ports){
                                                       rebalance_on = "years",
                                                       method ="compound")
   
-  monthly_cagr <- round(Return.annualized(portfolio_returns_rebal_monthly), 4)
-  rolling_monthly_var <- na.omit(rollapply(portfolio_returns_rebal_monthly, FUN = StdDev, width = 12)*sqrt(12))
-  port_returns <- c(port_returns, monthly_cagr)
-  port_var <- c(port_var, round(tail(rolling_monthly_var,1),4))
-  #weekly_cagr <- round(Return.annualized(portfolio_returns_rebal_weekly), 4)
-  #rolling_weekly_var <-na.omit(rollapply(portfolio_returns_rebal_weekly, FUN = StdDev, width = 252)*sqrt(252))
+  #monthly_cagr <- round(Return.annualized(portfolio_returns_rebal_monthly), 4)
+  #rolling_monthly_var <- na.omit(rollapply(portfolio_returns_rebal_monthly, FUN = StdDev, width = 12)*sqrt(12))
+  weekly_cagr <- round(Return.annualized(portfolio_returns_rebal_weekly), 4)
+  rolling_weekly_var <-na.omit(rollapply(portfolio_returns_rebal_weekly, FUN = StdDev, width = 4)*sqrt(252))
+  port_returns <- c(port_returns, weekly_cagr)
+  port_var <- c(port_var, round(tail(rolling_weekly_var,1),4))
   pcount = pcount +1 
 }
 ret_var <- cbind(port_returns, port_var)
 colnames(ret_var) <- c("CAGR", "STDev")
 portfolios <- cbind(as.data.frame(ret_var), weights)
-write.csv(portfolios, paste("RIF_PORTS_", end_date,".csv", sep=""))
+write.csv(portfolios, paste("RIF_PORTS_WEEKLY_DOWN_", end_date,".csv", sep=""))
